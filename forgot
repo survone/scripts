@@ -1,8 +1,0 @@
-#!/bin/bash
-
-echo
-echo "*** Scripts ***"
-echo
-echo "domaininfo <domain> - Returns various information regarding a domain and the user account associated with it."
-echo "firewallcheck <server> <ip> - Checks a servers CSF firewall for a specific IP address."
-echo

@@ -1,5 +1,0 @@
-#!/bin/bash
-
-echo
-echo Hostname: `ssh -q -t root@$1 hostname`
-echo
