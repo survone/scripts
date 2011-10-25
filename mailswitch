@@ -1,0 +1,48 @@
+#!/usr/bin/ruby
+
+# Define variables
+host = ""
+
+# Determine command line arguments
+ARGV.each do|a|
+host += "#{a}"
+end
+
+# Downcase host
+host.downcase!
+
+# Retrieve mail delivery status
+local = `ssh -q -t root@#{host} grep -Fx #{host} /etc/localdomains`;
+remote = `ssh -q -t root@#{host} grep -Fx #{host} /etc/remotedomains`;
+
+# Check delivery status
+if local != ""
+   # Set delivery status
+   delivery = "local"
+   new_delivery = "remote"
+
+   # Switch to remote
+   switch_command =  "ssh -q -t root@#{host} 'grep -Fxv #{host} /etc/localdomains > /etc/localdomains.new && mv /etc/localdomains.new /etc/localdomains && echo #{host} >> /etc/remotedomains'";
+elsif remote != ""
+   # Set delivery status
+   delivery = "remote"
+   new_delivery = "local"
+
+   # Switch to local
+   switch_command = "ssh -q -t root@#{host} 'grep -Fxv #{host} /etc/remotedomains > /etc/remotedomains.new && mv /etc/remotedomains.new /etc/remotedomains && echo #{host} >> /etc/localdomains'";
+else
+   delivery = "unknown"
+end
+
+# Write status
+puts
+puts "Domain: " + host
+puts "Delivery: " + delivery
+puts
+puts "This has now been switched to " + new_delivery
+puts
+
+# Execute switch command
+if delivery != "unknown"
+   exec "#{switch_command}"
+end

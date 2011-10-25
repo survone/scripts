@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ssh -q -t root@master "vi /namedb/$1.db && google/google $1 && named-checkzone $1 /namedb/$1.db"

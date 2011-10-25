@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo `ssh root@$1 csf -g $2`

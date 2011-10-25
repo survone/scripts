@@ -1,0 +1,95 @@
+#!/usr/bin/ruby
+
+# Define variables
+host = ""
+
+# Determine command line arguments
+ARGV.each do|a|
+host += "#{a}"
+end
+
+# Downcase host
+host.downcase!
+
+# Retrieve mail delivery status
+ssl_info = `echo Q| openssl s_client -connect #{host}:443 -showcerts 2>/dev/null |sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' |openssl x509 -noout -text -fingerprint`
+
+# Check for valid certificate
+if ssl_info.include?('CN=')
+	# Determine common name
+	common_name = ssl_info 
+	common_name = common_name.split('CN=')
+	common_name = common_name[2].split("\n")
+	common_name = common_name[0]
+	
+	# Determine alt names
+	if ssl_info.include?("Subject Alternative Name:")
+		alt_names = ssl_info
+		alt_names = alt_names.split('Subject Alternative Name:')
+		alt_names = alt_names[1].split("\n")
+		alt_names = alt_names[1].gsub(' ','').gsub('DNS:','').gsub(',',', ')
+	else
+		alt_names = "none"
+	end
+	
+	# Determine issuer
+	issuer = ssl_info
+	issuer = issuer.split('CN=')
+	issuer = issuer[1].split("\n")
+	issuer = issuer[0]
+	
+	# Determine serial
+	serial = ssl_info
+	serial = serial.split('Serial Number:')
+	serial = serial[1].split("\n")
+	serial = serial[1].gsub(' ','')
+	serial.upcase!
+	
+	# Determine fingerprint
+	if ssl_info.include?('SHA1 Fingerprint=')
+		fingerprint = ssl_info
+		fingerprint = fingerprint.split('SHA1 Fingerprint=')
+		fingerprint = 'SHA1 Fingerprint' + fingerprint[1]
+	elsif ssl_info.include?('MD5 Fingerprint=')
+		fingerprint = ssl_info
+                fingerprint = fingerprint.split('MD5 Fingerprint=')
+                fingerprint = 'MD5 Fingerprint: ' + fingerprint[1]
+	else
+		fingerprint = 'none'
+	end
+	
+	# Determine key length
+	key_length = ssl_info
+	key_length = key_length.split('RSA Public Key: (')
+	key_length = key_length[1].split(')')
+	key_length = key_length[0]
+	
+	# Determine value until date
+	valid_from = ssl_info
+        valid_from = valid_from.split('Not Before: ')
+        valid_from = valid_from[1].split("\n")
+	valid_from = valid_from[0]
+	
+	# Determine valid until date
+        valid_until = ssl_info
+        valid_until = valid_until.split('Not After : ')
+        valid_until = valid_until[1].split("\n")
+	valid_until = valid_until[0]
+	
+	# Write output
+	puts
+	puts "Common Name: " + common_name
+	puts "Subject Alternative Names: " + alt_names
+	puts "Issuer: " + issuer
+	puts "Serial: " + serial
+	puts fingerprint
+	puts "Key Length: " + key_length
+	puts
+	puts "Valid From: " + valid_from
+	puts "Valid Until: " + valid_until
+	puts
+else
+	puts
+	puts 'No SSL certificate detected.'
+	puts
+end

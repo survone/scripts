@@ -1,0 +1,19 @@
+#!/usr/bin/perl
+
+@nodes = ("tripwire.c1.site5.com","sparks.c1.site5.com","bullhorn.c1.site5.com","dialtone.c1.site5.com","copperhead.c1.site5.com","barbeque.c1.site5.com","monkeywrench.c1.site5.com","lifeline.c1.site5.com","firefly.c1.site5.com");
+$search = $ARGV[0];
+
+if ($search eq "") { print "syntax: $0 <search field>\neg. chcksearch.pl 127.0.0.1\n"; exit; }
+
+foreach $node (@nodes) {
+open(SSHCHK,"ssh -l root $node \"grep $search /var/log/mail.*\" |");
+ foreach $result (<SSHCHK>) {
+  chomp($result);
+  $result =~ s/\s+/ /g;
+  $found = 1;
+  print "$node:\n* $result\n";
+ }
+close(SSHCHK);
+}
+
+if ($found != 1) { $total = @nodes; print "could not find \"$search\" - searched $total mail heads\n"; }

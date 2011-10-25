@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo
+echo Hostname: `ssh -q -t root@$1 hostname -s`
+echo Username: `ssh -q -t root@$1 /scripts/whoowns $1`
+echo

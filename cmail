@@ -1,0 +1,24 @@
+#!/usr/bin/ruby
+
+# Define server array
+servers = [ 'sparks.c1', 'firefly.c1', 'barbeque.c1', 'bullhorn.c1', 'dialtone.c1', 'lifeline.c1', 'tripwire.c1', 'copperhead.c1', 'monkeywrench.c1' ]
+
+# Trap interrupt signal
+Signal.trap("SIGINT") do
+	Process.exit
+end
+
+# Define variables
+search = ''
+
+# Determine command line arguments
+ARGV.each do|s|
+  search += "#{s} "
+end
+
+# Loop through servers and grep logs, producing output on-the-fly
+servers.each do|s|
+	puts "----- #{s} -----\n\n"
+	io = IO.popen("ssh root@#{s} grep #{search} /var/log/mail.*")
+	io.each {|line| puts line}
+end

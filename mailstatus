@@ -1,0 +1,31 @@
+#!/usr/bin/ruby
+
+# Define variables
+host = ""
+
+# Determine command line arguments
+ARGV.each do|a|
+host += "#{a} "
+end
+
+# Downcase host
+host.downcase!
+
+# Retrieve mail delivery status
+local = `ssh -q -t root@#{host} grep -Fx #{host} /etc/localdomains`;
+remote = `ssh -q -t root@#{host} grep -Fx #{host} /etc/remotedomains`;
+
+# Check delivery status
+if local != ""
+   delivery = "local"
+elsif remote != ""
+   delivery = "remote"
+else
+   delivery = "unknown"
+end
+
+# Write status
+puts
+puts "Domain: " + host
+puts "Delivery: " + delivery
+puts
