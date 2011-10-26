@@ -15,7 +15,7 @@ host = host.gsub(/\s/,'')
 original_host = host
 
 # Remove HTTP tags
-host = host.gsub(/(http|https):\/\//,'')
+host = host.gsub(/(http|https|ftp):\/\//,'')
 
 # Remove helpdesk triangle
 host = host.gsub('»','')
