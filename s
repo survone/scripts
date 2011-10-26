@@ -15,7 +15,7 @@ host = host.gsub(/\s/,'')
 original_host = host
 
 # Remove HTTP tags
-host = host.gsub(/(http|https):\/\//,'');
+host = host.gsub(/(http|https):\/\//,'')
 
 # Remove helpdesk triangle
 host = host.gsub('»','')
@@ -52,11 +52,8 @@ host.downcase!
 
 # Print hostname
 if host != original_host
-	puts
-	puts "Original: " + original_host
-	puts "Corrected: " + host
-	puts
+	puts "\nOriginal: #{original_host}\nCorrected: #{host}\n\n"
 end
 
 # Establish SSH connection
-exec "ssh root@" + host
+exec "ssh root@#{host}"
