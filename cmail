@@ -18,7 +18,7 @@ end
 
 # Loop through servers and grep logs, producing output on-the-fly
 servers.each do|s|
-	puts "----- #{s} -----\n\n"
+	puts "----- #{s} -----\n"
 	io = IO.popen("ssh root@#{s} grep #{search} /var/log/mail.*")
 	io.each {|line| puts line}
 end

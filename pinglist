@@ -1,2 +1,2 @@
 #!/bin/bash
-for i in `cat $HOME/domainlist`; do ping -c1 $i; done
+for x in `cat $HOME/domainlist.txt`; do ping -c1 $x; done
