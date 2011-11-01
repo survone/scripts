@@ -1,5 +1,10 @@
 #!/usr/bin/ruby
 
+# Trap interrupt signal
+Signal.trap("SIGINT") do
+	Process.exit
+end
+
 # Define variables
 host = ""
 
