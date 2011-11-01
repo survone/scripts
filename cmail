@@ -10,6 +10,7 @@ servers = [ 'sparks.c1', 'firefly.c1', 'barbeque.c1', 'bullhorn.c1', 'dialtone.c
 
 # Define variables
 search = ''
+grep_string = ''
 
 # Determine command line arguments
 ARGV.each do|s|
@@ -28,7 +29,7 @@ ARGV.each do|s|
     end
 
     # Create grep string
-    grep_string =  date_day + ' ' + date_month
+    grep_string = date_day + ' ' + date_month
   else
     search += "#{s} "
   end
@@ -38,7 +39,7 @@ end
 servers.each do|s|
 	puts "----- #{s} -----\n"
 	if grep_string.length > 0
-	  io = IO.popen("ssh root@#{s} grep #{search} /var/log/mail.* | grep #{grep_string}")
+	  io = IO.popen("ssh root@#{s} grep #{search} /var/log/mail.* | grep '#{grep_string}'")
 	else
   	  io = IO.popen("ssh root@#{s} grep #{search} /var/log/mail.*")
 	end
