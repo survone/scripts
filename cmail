@@ -13,12 +13,34 @@ search = ''
 
 # Determine command line arguments
 ARGV.each do|s|
-  search += "#{s} "
+  # Check for flags
+  if s == '-t'
+    # Write output
+    puts "Checking mail from today only.\n\n"
+
+    # Determine day and month
+    date_day = Time.now.strftime('%-d')
+    date_month = Time.now.strftime('%b')
+
+    # Correct day (add additional space if necessary)
+    if date_day.length == 1 then
+      date_day += ' '
+    end
+
+    # Create grep string
+    grep_string =  date_day + ' ' + date_month
+  else
+    search += "#{s} "
+  end
 end
 
 # Loop through servers and grep logs, producing output on-the-fly
 servers.each do|s|
 	puts "----- #{s} -----\n"
-	io = IO.popen("ssh root@#{s} grep #{search} /var/log/mail.*")
+	if grep_string.length > 0
+	  io = IO.popen("ssh root@#{s} grep #{search} /var/log/mail.* | grep #{grep_string}")
+	else
+  	  io = IO.popen("ssh root@#{s} grep #{search} /var/log/mail.*")
+	end
 	io.each {|line| puts line}
 end
