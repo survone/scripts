@@ -39,7 +39,7 @@ end
 servers.each do|s|
 	puts "----- #{s} -----\n"
 	if grep_string.length > 0
-	  io = IO.popen("ssh root@#{s} grep #{search} /var/log/mail.* | grep '#{grep_string}'")
+	  io = IO.popen("ssh root@#{s} grep #{search} /var/log/mail.* |grep '#{grep_string}'")
 	else
   	  io = IO.popen("ssh root@#{s} grep #{search} /var/log/mail.*")
 	end
