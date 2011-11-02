@@ -1,5 +1,5 @@
 #!/bin/bash
 
 echo
-ssh -q -t root@$1 "echo Hostname: \`hostname -s\` && echo Username: \`/scripts/whoowns $1\`"
+ssh -q -t root@$1 "echo Hostname: \`hostname\` && echo Username: \`/scripts/whoowns $1\`"
 echo
