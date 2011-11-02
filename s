@@ -50,9 +50,12 @@ end
 # Convert hostname to lower case
 host.downcase!
 
+# Remove 'www.' for /scripts/whoowns friendly version
+whoowns_host = host.gsub('www.','')
+
 # Print hostname
 if host != original_host
-	puts "\nOriginal: #{original_host}\nCorrected: #{host}\n\n"
+	puts "\nOriginal: #{original_host}\nCorrected: #{host}\ncPanel Friendly: #{whoowns_host}\n\n"
 end
 
 # Establish SSH connection
