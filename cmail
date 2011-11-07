@@ -31,7 +31,7 @@ ARGV.each do|s|
     # Create grep string
     grep_string = date_day + ' ' + date_month
   else
-    search += "#{s} "
+    search += "#{s}"
   end
 end
 
