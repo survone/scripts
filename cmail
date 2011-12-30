@@ -11,13 +11,14 @@ servers = [ 'sparks.c1', 'firefly.c1', 'barbeque.c1', 'bullhorn.c1', 'dialtone.c
 # Define variables
 search = ''
 grep_string = ''
+s = ''
 
 # Determine command line arguments
 ARGV.each do|s|
   # Check for flags
   if s == '-t'
     # Write output
-    puts "Checking mail from today only.\n\n"
+    puts "Checking mail from today only.\n"
 
     # Determine day and month
     date_day = Time.now.strftime('%-d')
@@ -34,6 +35,9 @@ ARGV.each do|s|
     search += "#{s}"
   end
 end
+
+# Write search terms
+puts "Search terms: '#{s}'\n\n"
 
 # Loop through servers and grep logs, producing output on-the-fly
 servers.each do|s|

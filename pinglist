@@ -1,2 +1,2 @@
 #!/bin/bash
-for x in `cat $HOME/domainlist.txt`; do ping -c1 $x; done
+for x in `cat $HOME/domainlist.txt`; do host -t a $x dns.site5.com; done

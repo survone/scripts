@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 
-# Define variables
+# Define variables
 host = ""
 
 # Determine command line arguments
